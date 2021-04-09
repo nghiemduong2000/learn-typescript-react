@@ -1,25 +1,31 @@
-import React, { FC, Suspense } from 'react';
-import { Provider } from 'react-redux';
-import { Route, Router, Switch } from 'react-router-dom';
-import { store } from './store';
-import AppLayout from './layout/App.layout';
-import { history } from './helpers/history';
-
+import { getWeather } from 'actions/weatherAction';
 import 'antd/dist/antd.css';
+import React, { FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { HashRouter as Router } from 'react-router-dom';
 
 const App: FC = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getWeather('Hanoi', 'Vietnam'));
+    // eslint-disable-next-line
+  }, []);
   return (
-    <Provider store={store}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Router history={history}>
-          <Switch>
-            <Route path={'/'}>
-              <AppLayout />
-            </Route>
-          </Switch>
-        </Router>
-      </Suspense>
-    </Provider>
+    <Router>
+      <div className="App">
+        <div className="fixed w-full z-1">
+          <Navbar />
+          <Title />
+        </div>
+        <div className="appWrap w-full bg-opacity-50 bg-gradient-to-b from-orange-l to-white-custom">
+          <div className="body mx-auto">
+            <Form />
+            <Weather />
+          </div>
+        </div>
+      </div>
+    </Router>
   );
 };
 
